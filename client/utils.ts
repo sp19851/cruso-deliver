@@ -55,11 +55,20 @@ export async function PlayAnimationWithProp(animDict: string, anim:string, prop:
         while (!HasAnimDictLoaded(animDict)) await Delay(100);
         TaskPlayAnim(Cfx.Game.PlayerPed.Handle, animDict, anim, 8, 1, -1, 50, 0, false, false, false);
 }
-export async function StopAnimWithProp(prop: Prop, animDict: string, anim:string){
+export async function PlayPedAnimationWithProp(ped: number, animDict: string, anim:string, prop:string){
+    if (IsEntityPlayingAnim(ped, animDict, anim, 50))
+        {
+            ClearPedTasks(ped);
+        }
+        RequestAnimDict(animDict);
+        while (!HasAnimDictLoaded(animDict)) await Delay(100);
+        TaskPlayAnim(ped, animDict, anim, 8, 1, -1, 50, 0, false, false, false);
+}
+export async function StopAnimWithProp(ped:number, prop: Prop, animDict: string, anim:string){
     
     prop.delete();
     while (prop.exists()) await Delay(100);
-    StopAnimTask(Cfx.Game.PlayerPed.Handle, animDict, anim, -4);
+    StopAnimTask(ped, animDict, anim, -4);
     
 }
 

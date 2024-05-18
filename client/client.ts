@@ -131,7 +131,7 @@ onNet("cruso-deliver:client:GiveOrder", async (args: any) => {
 								rotation: { "x": 0.0, "y": 0.0, "z": 0.0 },*/
 							}, {}, async function Done()
 							{
-								await Utils.StopAnimWithProp(props[0], 'anim@heists@box_carry@', 'idle');
+								await Utils.StopAnimWithProp(Cfx.Game.PlayerPed.Handle, props[0], 'anim@heists@box_carry@', 'idle');
 								props.splice(0, props.length);
 							}, // Done
 							() => {	console.error("сбой")	} //  Cancel
@@ -342,7 +342,19 @@ async function  TakeOrder(){
 		rotation: { "x": 0.0, "y": 0.0, "z": 0.0 },*/
 	}, {}, async function Done()
 	{
-		await Utils.StopAnimWithProp(props[0], 'anim@heists@box_carry@', 'idle');
+		await Utils.StopAnimWithProp(Cfx.Game.PlayerPed.Handle, props[0], 'anim@heists@box_carry@', 'idle');
+		props.splice(0, props.length);
+
+		if (props.length == 0) {
+			let _pos = GetEntityCoords(ped, true);
+			var prop = await Cfx.World.createProp(new Cfx.Model('hei_prop_heist_box'), new Vector3(_pos[0], _pos[1], _pos[2]), false, true);
+			props.push(prop);
+			await Utils.PlayPedAnimationWithProp(ped, "anim@heists@box_carry@", 'idle', 'hei_prop_heist_box');
+			AttachEntityToEntity(prop.Handle, ped, GetPedBoneIndex(ped, 28422), 0, 0, 0, 0, 0, 0, true, true, false, true, 1, true);
+			
+		}
+		await Delay(5000);
+		await Utils.StopAnimWithProp(ped,props[0], 'anim@heists@box_carry@', 'idle');
 		props.splice(0, props.length);
 		DeleteEntity(ped)
 		_onRoute.isOrder = false;
