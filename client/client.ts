@@ -267,7 +267,7 @@ const init = setTick(async () => {
 			{
 				label: deliver.Office.TargetLabelGetItems,
 				icon: deliver.Office.TargetIconGetItems,
-				canInteract: () => {return !_onRoute.isOrder && inMission && !_onRoute.onRoute},
+				canInteract: () => {return  inMission && !_onRoute.onRoute},
 				event: 'cruso-deliver:client:getOrder',
 			}
 		],
@@ -290,7 +290,8 @@ async function  StartMission(){
 			if (!_onRoute.isOrder) {
 				await Delay(Utils.RandNum(15000, 25000));
 				GenerateOrder();
-				Cfx.Screen.displayHelpTextThisFrame(`Заказ готов. Подойдите к менеджеру и заберите его`);
+				_onRoute.isOrder = true;
+				//Cfx.Screen.displayHelpTextThisFrame(`Заказ готов. Подойдите к менеджеру и заберите его`);
 
 			}
 			else {
