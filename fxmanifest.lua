@@ -2,7 +2,9 @@ fx_version 'cerulean'
 game 'gta5'
 
 files {
-	'config.json'
+	'config/*.json',
+	'*.json'
+	
 }
 
 client_scripts {

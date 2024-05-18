@@ -15,5 +15,8 @@
 		"@types/node": "^20.8.9",
 		"esbuild": "^0.19.5",
 		"typescript": "^5.2.2"
+	},
+	"dependencies": {
+		"fivem-js": "^1.5.2"
 	}
 }

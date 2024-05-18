@@ -1,1 +1,1 @@
-"use strict";(()=>{console.log("test");})();
+"use strict";(()=>{var s=global.exports["qb-core"].GetCoreObject();onNet("cruso-deliver:server:GiveOrder",r=>{let e=source,t=s.Functions.GetPlayer(e);emitNet("cruso-deliver:client:GiveOrder",source)});onNet("cruso-deliver:server:RemoveOrderItem",(r,e)=>{let t=source,o=s.Functions.GetPlayer(t);o.Functions.RemoveItem(r,1),o.Functions.AddMoney("cash",e,"takeOrder"),emitNet("cruso-deliver:client:TakeOrder",source)});})();
