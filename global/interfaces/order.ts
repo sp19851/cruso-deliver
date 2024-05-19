@@ -5,6 +5,9 @@ interface IRootObject {
 }
 
 interface IOrder {
+  TargetPosTake: ITargetPos;
+  TargetPosTakePed: ITargetPos;
+  PedTake: string;
   TargetPos: ITargetPos;
   TargetPosPed: ITargetPos;
   Ped: string;

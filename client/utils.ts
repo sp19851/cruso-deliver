@@ -24,6 +24,7 @@ export function blipCreate(pos:Cfx.Vector3, name: string, sprite: number, color:
     SetBlipColour(blip, color);
     SetBlipScale(blip, scale);
     SetBlipDisplay(blip, 4);
+    SetBlipAsShortRange(blip, true)
     BeginTextCommandSetBlipName("STRING");
     AddTextComponentSubstringPlayerName(name);
     EndTextCommandSetBlipName(blip);

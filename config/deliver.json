@@ -3,23 +3,34 @@
         "Ped":"S_M_M_Postal_01",
         "PedPosition": {"x":-258.98, "y":-843.83, "z":31.4, "w":160.95},
         "PedScenario":"WORLD_HUMAN_CLIPBOARD",
-        "TargetLabel":"Начать работу/ Уйти отдыхать",
+        "TargetLabelManager":"Начать работу",
+        "TargetLabelManagerDone":"Закончить работу",
         "TargetIcon": "fa fa-align-justify",
         
         "Vehicle":"boxville2", 
         "VehiclePosition": {"x":-255.05, "y":-856.4, "z":31.08, "w":67.13},
+        "VehicleCredit":100,
         "Blip":{
             "Name":"Доставка",
             "Position": {"x":-258.98, "y":-843.83, "z":31.4, "w":0.0},
             "Sprite": 616,
             "Color": 2,
-            "Scale":1
+            "Scale":0.6
         },
         "TargetLabelGetItems":"Взять заказ",
         "TargetIconGetItems": "fa-solid fa-dolly"
     },
+    "Marker":{
+        "Type": 1,
+        "Scale": {"x":1.0, "y":1.0, "z":0.2},
+        "Color": {"r":255, "g":255, "b":255},
+        "Dist": 40
+    },
     "Orders":[
         {
+            "TargetPosTake": {"x":-300.5, "y":-841.27, "z":31.57, "w":86.81},
+            "TargetPosTakePed": {"x":-296.14, "y":-829.11, "z":32.42, "w":177.76},
+            "PedTake":"CS_LesterCrest",
             "TargetPos": {"x":-227.73, "y":-891.14, "z":29.77, "w":241.69},
             "TargetPosPed": {"x":-232.27, "y":-915.2, "z":32.31, "w":329.21},
             

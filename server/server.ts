@@ -3,11 +3,12 @@ import * as Cfx from "fivem-js";
 
 let QBCore = global.exports['qb-core'].GetCoreObject();
 
-onNet("cruso-deliver:server:GiveOrder",(item:string) => {
+onNet("cruso-deliver:server:TakeOrder", (itemName:string) => {
      let src = source
      let Player = QBCore.Functions.GetPlayer(src) 
-     Player.Functions.AddItem(item, 1)
-     emitNet("cruso-deliver:client:GiveOrder", source)
+    
+     Player.Functions.AddItem(itemName, 1)
+     emitNet("cruso-deliver:client:TakeOrder", source)
     }
 );
 
