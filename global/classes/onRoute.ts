@@ -18,6 +18,7 @@ export class onRoute {
         this.onRoute = false;
         this.itemInVehicle = false;
         this.onRouteInOrderKeeper = false;
+        this.onRouteInOrderGiver = false;
     }
 } 
 

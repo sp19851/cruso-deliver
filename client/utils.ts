@@ -66,9 +66,13 @@ export async function PlayPedAnimationWithProp(ped: number, animDict: string, an
         TaskPlayAnim(ped, animDict, anim, 8, 1, -1, 50, 0, false, false, false);
 }
 export async function StopAnimWithProp(ped:number, prop: Prop, animDict: string, anim:string){
-    
+    //console.log("try delete prop", prop.Handle)
     prop.delete();
+    /*DetachEntity(prop.Handle, true, true);
+    DeleteObject(prop.Handle);
+    DeleteEntity(prop.Handle);*/
     while (prop.exists()) await Delay(100);
+    //console.log("prop", DoesEntityExist(prop.Handle), prop.exists(), prop.Handle)
     StopAnimTask(ped, animDict, anim, -4);
     
 }
@@ -82,7 +86,6 @@ export async function PedCreate(model:Cfx.Model, pos:Cfx.Vector3, heading:number
 
 export async function pedCreate(model:string, pos:Cfx.Vector3, heading:number, scenario:string):Promise<number>
 {
-    
     var hash = GetHashKey(model);
     await LoadModel(hash);
     var handle = CreatePed(4, hash, pos.x, pos.y, pos.z - 0.98, heading, false, true);
@@ -91,7 +94,6 @@ export async function pedCreate(model:string, pos:Cfx.Vector3, heading:number, s
     SetEntityInvincible(handle, true);
     SetBlockingOfNonTemporaryEvents(handle, true);
     TaskStartScenarioInPlace(handle, scenario, -1, true);
-    
     console.log("ped created", handle)
     return handle;
 }

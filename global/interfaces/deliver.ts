@@ -17,6 +17,7 @@ interface IOffice {
   TargetLabelManagerDone:string;
   TargetIcon:string;
   Vehicle: string;
+  VehicleDeposit: number;
   VehiclePosition: IVehiclePosition;
   VehicleCredit: number,
   Blip:Blip,
