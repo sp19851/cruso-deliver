@@ -40,6 +40,19 @@
             "Item":"laptop",
             "PedScenario":"WORLD_HUMAN_Stand"
             
+        },
+        {
+            "TargetPosTake": {"x":-145.17, "y":-811.67, "z":31.58, "w":341.42}, 
+            "TargetPosTakePed": {"x":-133.5, "y":-813.77, "z":31.68, "w":55.57}, 
+            "PedTake":"CS_LesterCrest",
+            "TargetPos": {"x":-227.73, "y":-891.14, "z":29.77, "w":241.69},
+            "TargetPosPed": {"x":-232.27, "y":-915.2, "z":32.31, "w":329.21},
+            
+            "Ped":"S_F_Y_Cop_01",
+            "Price": 25,
+            "Item":"laptop",
+            "PedScenario":"WORLD_HUMAN_Stand"
+            
         }
     ]
 }

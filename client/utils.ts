@@ -2,6 +2,25 @@ const Delay = (time: number) => new Promise(resolve => setTimeout(resolve, time)
 import {Prop}  from "fivem-js";
 import * as Cfx from "fivem-js";
 
+export function Draw3DText(coords:Cfx.Vector3, str:string){
+    const [retval, screenX, screenY]: [boolean, number, number] = World3dToScreen2d(coords.x, coords.y, coords.z)
+    let camCoords = GetGameplayCamCoord()
+    let camCoordsVector3 = new Cfx.Vector3(camCoords[0], camCoords[1], camCoords[2])
+    let scale = 200 / (GetGameplayCamFov() * camCoordsVector3.distance(coords))
+    if (retval){
+        SetTextScale(1.0, 0.5 * scale)
+        SetTextFont(4)
+        SetTextColour(255, 255, 255, 255)
+        SetTextEdge(2, 0, 0, 0, 150)
+        SetTextProportional(true)
+        SetTextOutline()
+        SetTextCentre(true)
+        BeginTextCommandDisplayText('STRING')
+        AddTextComponentSubstringPlayerName(str)
+        EndTextCommandDisplayText(screenX, screenY)
+    } 
+}
+    
 
 
 export async function BlipCreate(pos:Cfx.Vector3, radius: number, name: string, sprite: number, color: number, scale:number): Promise<Cfx.Blip>{

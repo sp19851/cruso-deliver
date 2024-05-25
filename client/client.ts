@@ -162,19 +162,20 @@ async function main(){
 					let posV = new Vector3(posAr[0], posAr[1], posAr[2]).multiply(5);
 					let pos = Utils.GetVehicleBonePos(currentVehicle, "boot");
 					//pos = Vector3.subtract(pos, posV);
-					Cfx.World.drawMarker(Cfx.MarkerType.DebugSphere, pos, new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(0.5,0.5,0.5), 
+					Cfx.World.drawMarker(Cfx.MarkerType.DebugSphere, pos, new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(0.2,0.2,0.2), 
 						Cfx.Color.fromArgb(255, deliver.Marker.Color.r, deliver.Marker.Color.g, deliver.Marker.Color.b));
 					let dist = Cfx.Game.PlayerPed.Position.distance(pos);
 					//console.log("dst", dist, "pos", JSON.stringify(pos), "ped", JSON.stringify(Cfx.Game.PlayerPed.Position) )
 					if (dist < 2.5) {
-						global.exports['qb-core'].DrawText("[E] - Убрать в машину", 'left')
+						//global.exports['qb-core'].DrawText("[E] - Убрать в машину", 'left')
+						Utils.Draw3DText(pos, "[E] - Убрать в машину")
 						if (IsControlJustPressed(0, 38))
 						{
 							_onRoute.itemInVehicle = true;
-							global.exports['qb-core'].HideText()
+							//global.exports['qb-core'].HideText()
 							var targetPos = new Vector3(currentOrder.TargetPos.x, currentOrder.TargetPos.y, currentOrder.TargetPos.z)
 							SetPointRoute(new Vector3(currentOrder.TargetPos.x, currentOrder.TargetPos.y, currentOrder.TargetPos.z));
-							QBCore.Functions.Progressbar('getOrder', "Убираем заказ", 500, false, false, {
+							QBCore.Functions.Progressbar('getOrder', "Убираем заказ", 2500, false, false, {
 								disableMovement: true,
 								disableCarMovement: true,
 								disableMouse: false,
@@ -200,7 +201,7 @@ async function main(){
 					}
 					else 
 					{
-						global.exports['qb-core'].HideText()
+						//global.exports['qb-core'].HideText()
 					}
 			} else if (_onRoute.itemInVehicle)
 			{
@@ -210,22 +211,23 @@ async function main(){
 					Cfx.World.drawMarker(deliver.Marker.Type, new Vector3(currentOrder.TargetPos.x, currentOrder.TargetPos.y, currentOrder.TargetPos.z-1), new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(3,3,deliver.Marker.Scale.z), 
 						Cfx.Color.fromArgb(255, deliver.Marker.Color.r, deliver.Marker.Color.g, deliver.Marker.Color.b));
 				}
-				if (dist < 5 && GetEntitySpeed(currentVehicle) == 0) {
-					Cfx.Screen.displayHelpTextThisFrame(`Достаньте заказ и машины и отнесите заказчику`);
+				if (dist < 5 && GetEntitySpeed(currentVehicle) < 1) {
+					Cfx.Screen.displayHelpTextThisFrame(`Достаньте заказ из машины и отнесите заказчику`);
 					let posAr = GetEntityForwardVector(currentVehicle);
-					let posV = new Vector3(posAr[0], posAr[1], posAr[2]).multiply(5);
+					//let posV = new Vector3(posAr[0], posAr[1], posAr[2]).multiply(5);
 					let pos = Utils.GetVehicleBonePos(currentVehicle, "boot");
 					//pos = Vector3.subtract(pos, posV);
 					if (!Cfx.Game.PlayerPed.isInAnyVehicle()) {
-						Cfx.World.drawMarker(Cfx.MarkerType.DebugSphere, pos, new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(0.5,0.5,deliver.Marker.Scale.z), 
+						Cfx.World.drawMarker(Cfx.MarkerType.DebugSphere, pos, new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(0.2,0.2,0.2), 
 						Cfx.Color.fromArgb(255, deliver.Marker.Color.r, deliver.Marker.Color.g, deliver.Marker.Color.b));
 						let distToBoot = Cfx.Game.PlayerPed.Position.distance(pos);
-						if (dist < 2) {
-							global.exports['qb-core'].DrawText("[E] - Достать из машины", 'left')
+						if (distToBoot < 2.5) {
+							//global.exports['qb-core'].DrawText("[E] - Достать из машины", 'left')
+							Utils.Draw3DText(pos, "[E] - Достать из машины")
 							if (IsControlJustPressed(0, 38))
 							{
 								_onRoute.itemInVehicle = true;
-								global.exports['qb-core'].HideText()
+								//global.exports['qb-core'].HideText()
 								var targetPos = new Vector3(currentOrder.TargetPos.x, currentOrder.TargetPos.y, currentOrder.TargetPos.z)
 								SetBlipRoute(routeBlip,false);
 								RemoveBlip(routeBlip);
@@ -277,11 +279,13 @@ async function main(){
 						Cfx.Color.fromArgb(255, deliver.Marker.Color.r, deliver.Marker.Color.g, deliver.Marker.Color.b));
 					}
 					if (dist < 2) {
-						global.exports['qb-core'].DrawText("[E] - Постучать", 'left')
+						Utils.Draw3DText(new Vector3(currentOrder.TargetPosPed.x, currentOrder.TargetPosPed.y, currentOrder.TargetPosPed.z), "[E] - Постучать")
+						//global.exports['qb-core'].DrawText("[E] - Постучать", 'left')
+						
 							if (IsControlJustPressed(0, 38))
 							{
 								_onRoute.toReset();
-								global.exports['qb-core'].HideText()
+								//global.exports['qb-core'].HideText()
 								SetBlipRoute(routeBlip,false);
 								RemoveBlip(routeBlip);
 								routeBlip = 0;
