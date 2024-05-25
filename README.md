@@ -3,6 +3,9 @@
 Cruso_deliver — это простенький скрипт **работы доставщика** для **RP** серверов **FievM** под **QBCore**.
 Для его использования нужно [установить](https://github.com/qbcore-framework) фреймворк.
 
+##Предпросмотр
+https://youtu.be/cRl0ZiQcZZo
+
 ## Зависимости
 - QbCore (https://github.com/qbcore-framework);
 - Yarn
