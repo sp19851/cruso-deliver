@@ -377,7 +377,7 @@ async function  FinishMission(){
 
 //Генерируем заказ
 async function GenerateOrder(){
-	//await Delay(Utils.RandNum(15000, 25000));
+	await Delay(Utils.RandNum(15000, 25000));
 	currentOrder = deliver.Orders[Utils.RandNum(0, deliver.Orders.length-1)];
 	_onRoute.isOrder = true
 	SetPointRoute(new Vector3(currentOrder.TargetPosTake.x, currentOrder.TargetPosTake.y, currentOrder.TargetPosTake.z))
