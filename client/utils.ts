@@ -132,3 +132,14 @@ export const GetVehicleBonePos = function(vehicle: number, bone: string): Cfx.Ve
     //console.log("GetVehicleBonePos", _bone, pos)
     return new Cfx.Vector3(pos[0], pos[1], pos[2]);
 }
+
+export const  InsertChar= function(_string:string, args: string[]):string
+{
+    let s = "";
+    s = _string;
+    for (let index = 0; index < args.length; index++) {
+        const element = args[index];
+        s= s.replace("{0}", element)        
+    }
+    return s;
+}

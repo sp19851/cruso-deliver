@@ -40,7 +40,7 @@ onNet("cruso-deliver:server:ReturnDeposit",(price:number) => {
 );
 
 QBCore.Functions.CreateCallback('cruso:server:CanPay', (source:number, cb:any, price:number) => {
-    console.log('cruso:server:CanPay', source, price)
+    //console.log('cruso:server:CanPay', source, price)
     let Player = QBCore.Functions.GetPlayer(source)
     console.log(Player.PlayerData.money['bank'], Player.PlayerData.money['cash'])
     cb(Player.PlayerData.money['bank']>= price || Player.PlayerData.money['cash']>= price);

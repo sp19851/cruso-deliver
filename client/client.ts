@@ -1,6 +1,7 @@
 const Delay = (time: number) => new Promise(resolve => setTimeout(resolve, time));
 import { Vector3 } from 'fivem-js';
 import { cfg } from '../global/config'
+import { locale } from '../global/locale'
 import { deliver } from '../global/getDeliverConfig'
 import * as Cfx from "fivem-js";
 import * as Utils from '../client/utils'
@@ -51,11 +52,13 @@ on("cruso-deliver:client:startMission", async (args: any) => {
 					emit("vehiclekeys:client:SetOwner", GetVehicleNumberPlateText(v))
 					SetVehicleEngineOn(v, true, true, false)
 				}, deliver.Office.VehiclePosition, true)
-				QBCore.Functions.Notify('Вы начали работать. Проверьте автомобиль и ожидайте заказ', 'primary', 5000)
+				//QBCore.Functions.Notify('Вы начали работать. Проверьте автомобиль и ожидайте заказ', 'primary', 5000)
+				QBCore.Functions.Notify(locale.StartMessage, 'primary', 5000);
 				await StartMission();
 			}
 			else {
-				QBCore.Functions.Notify(`Нужно $${deliver.VehicleDeposit} для залога`, "error", 5000);	
+				//QBCore.Functions.Notify(`Нужно $${deliver.VehicleDeposit} для залога`, "error", 5000);	
+				QBCore.Functions.Notify(Utils.InsertChar(locale.DepositeNeed, [deliver.Office.VehicleDeposit]), "error", 5000);	
 			}
 			
 		}, deliver.Office.VehicleDeposit)
@@ -64,27 +67,7 @@ on("cruso-deliver:client:startMission", async (args: any) => {
 		FinishMission();
 	}
 })
-//Слушаем событие взятия заказа от target
-/*on("cruso-deliver:client:TakeOrder", async (args: any) => {
-	console.log("cruso-deliver:client:TakeOrder")
-	_onRoute.onRoute = true;
-	QBCore.Functions.Progressbar('TakeOrder', "Забираем заказ", 500, false, false, {
-		disableMovement: true,
-		disableCarMovement: true,
-		disableMouse: false,
-		disableCombat: true,
-	}, {
 
-	}, {
-
-	}, {}, function Done()
-	{
-		//console.log("try server call")
-		emitNet("cruso-deliver:server:TakeOrder", currentOrder.Item);
-	}, // Done
-	() => {	console.error("сбой")	} //  Cancel
-	)
-})*/
 //Слушаем событие взятия заказа от сервера
 onNet("cruso-deliver:client:TakeOrder", async (args: any) => {
 	TakeOrder();
@@ -93,15 +76,6 @@ onNet("cruso-deliver:client:TakeOrder", async (args: any) => {
 onNet("cruso-deliver:client:GenerateOrder", async (args: any) => {
 	GenerateOrder();
 })
-
-/*//Слушаем событие взятия заказа от сервера
-onNet("cruso-deliver:client:TakeOrder", async (args: any) => {
-	clearTick(onRouteTick);
-	
-	QBCore.Functions.Notify('Вы успешно завершили работу', 'success', 5000);
-	await Delay(15000);
-})
-*/
 
 
 //инициализируем программу
@@ -127,12 +101,6 @@ const init = setTick(async () => {
 				event: 'cruso-deliver:client:startMission', 
 				canInteract: () => {return  inMission}, //&& !_onRoute.onRoute},
 			},
-			/*{
-				label: deliver.Office.TargetLabelGetItems,
-				icon: deliver.Office.TargetIconGetItems,
-				canInteract: () => {return  inMission && !_onRoute.onRoute},
-				event: 'cruso-deliver:client:getOrder',
-			}*/
 		],
 		distance: 2.5,
 	});
@@ -148,7 +116,6 @@ async function main(){
 		{
 			if (!_onRoute.itemInVehicle && !_onRoute.onRouteInOrderKeeper)
 			{
-					
 					if (props.length == 0) {
 						let _pos = new Vector3(Cfx.Game.PlayerPed.Position.x, Cfx.Game.PlayerPed.Position.y, Cfx.Game.PlayerPed.Position.z + 0.5);
 						var prop = await Cfx.World.createProp(new Cfx.Model('hei_prop_heist_box'), _pos, false, true);
@@ -157,7 +124,7 @@ async function main(){
 						AttachEntityToEntity(prop.Handle, Cfx.Game.PlayerPed.Handle, GetPedBoneIndex(Cfx.Game.PlayerPed.Handle, 28422), 0, 0, 0, 0, 0, 0, true, true, false, true, 1, true);
 					}
 					
-					Cfx.Screen.displayHelpTextThisFrame(`Положите коробку в машину и следуйте к месту доставки`);
+					Cfx.Screen.displayHelpTextThisFrame(locale.PutItem);
 					let posAr = GetEntityForwardVector(currentVehicle);
 					let posV = new Vector3(posAr[0], posAr[1], posAr[2]).multiply(5);
 					let pos = Utils.GetVehicleBonePos(currentVehicle, "boot");
@@ -168,14 +135,14 @@ async function main(){
 					//console.log("dst", dist, "pos", JSON.stringify(pos), "ped", JSON.stringify(Cfx.Game.PlayerPed.Position) )
 					if (dist < 2.5) {
 						//global.exports['qb-core'].DrawText("[E] - Убрать в машину", 'left')
-						Utils.Draw3DText(pos, "[E] - Убрать в машину")
+						Utils.Draw3DText(pos, locale.PutItemInteract)
 						if (IsControlJustPressed(0, 38))
 						{
 							_onRoute.itemInVehicle = true;
 							//global.exports['qb-core'].HideText()
 							var targetPos = new Vector3(currentOrder.TargetPos.x, currentOrder.TargetPos.y, currentOrder.TargetPos.z)
 							SetPointRoute(new Vector3(currentOrder.TargetPos.x, currentOrder.TargetPos.y, currentOrder.TargetPos.z));
-							QBCore.Functions.Progressbar('getOrder', "Убираем заказ", 2500, false, false, {
+							QBCore.Functions.Progressbar('getOrder', locale.Puting, 2500, false, false, {
 								disableMovement: true,
 								disableCarMovement: true,
 								disableMouse: false,
@@ -205,14 +172,14 @@ async function main(){
 					}
 			} else if (_onRoute.itemInVehicle)
 			{
-				Cfx.Screen.displayHelpTextThisFrame(`Cледуйте к месту доставки`);
+				Cfx.Screen.displayHelpTextThisFrame(locale.DriveToPoint);
 				let dist = Cfx.Vehicle.fromHandle(currentVehicle).Position.distance(currentOrder.TargetPos)
 				if (dist <= deliver.Marker.Dist) {
 					Cfx.World.drawMarker(deliver.Marker.Type, new Vector3(currentOrder.TargetPos.x, currentOrder.TargetPos.y, currentOrder.TargetPos.z-1), new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(3,3,deliver.Marker.Scale.z), 
 						Cfx.Color.fromArgb(255, deliver.Marker.Color.r, deliver.Marker.Color.g, deliver.Marker.Color.b));
 				}
 				if (dist < 5 && GetEntitySpeed(currentVehicle) < 1) {
-					Cfx.Screen.displayHelpTextThisFrame(`Достаньте заказ из машины и отнесите заказчику`);
+					Cfx.Screen.displayHelpTextThisFrame(locale.TakeItem);
 					let posAr = GetEntityForwardVector(currentVehicle);
 					//let posV = new Vector3(posAr[0], posAr[1], posAr[2]).multiply(5);
 					let pos = Utils.GetVehicleBonePos(currentVehicle, "boot");
@@ -222,8 +189,8 @@ async function main(){
 						Cfx.Color.fromArgb(255, deliver.Marker.Color.r, deliver.Marker.Color.g, deliver.Marker.Color.b));
 						let distToBoot = Cfx.Game.PlayerPed.Position.distance(pos);
 						if (distToBoot < 2.5) {
-							//global.exports['qb-core'].DrawText("[E] - Достать из машины", 'left')
-							Utils.Draw3DText(pos, "[E] - Достать из машины")
+							
+							Utils.Draw3DText(pos, locale.TakeItemInteract)
 							if (IsControlJustPressed(0, 38))
 							{
 								_onRoute.itemInVehicle = true;
@@ -232,7 +199,7 @@ async function main(){
 								SetBlipRoute(routeBlip,false);
 								RemoveBlip(routeBlip);
 								routeBlip = 0;
-								QBCore.Functions.Progressbar('getOrder', "Достаем заказ", 500, false, false, {
+								QBCore.Functions.Progressbar('getOrder', locale.Taking, 500, false, false, {
 									disableMovement: true,
 									disableCarMovement: true,
 									disableMouse: false,
@@ -270,22 +237,18 @@ async function main(){
 				}
 			} else if (!_onRoute.itemInVehicle && _onRoute.onRouteInOrderKeeper)
 				{
-					Cfx.Screen.displayHelpTextThisFrame(`Cледуйте к заказчику`);
+					Cfx.Screen.displayHelpTextThisFrame(locale.GoToOrder);
 					
 					let dist = Cfx.Game.PlayerPed.Position.distance(currentOrder.TargetPosPed)
-					//console.log("dist", dist)
 					if (dist < 15) {
 						Cfx.World.drawMarker(deliver.Marker.Type, new Vector3(currentOrder.TargetPosPed.x, currentOrder.TargetPosPed.y, currentOrder.TargetPosPed.z-1), new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(deliver.Marker.Scale.x,deliver.Marker.Scale.y,deliver.Marker.Scale.z), 
 						Cfx.Color.fromArgb(255, deliver.Marker.Color.r, deliver.Marker.Color.g, deliver.Marker.Color.b));
 					}
 					if (dist < 2) {
-						Utils.Draw3DText(new Vector3(currentOrder.TargetPosPed.x, currentOrder.TargetPosPed.y, currentOrder.TargetPosPed.z), "[E] - Постучать")
-						//global.exports['qb-core'].DrawText("[E] - Постучать", 'left')
-						
+						Utils.Draw3DText(new Vector3(currentOrder.TargetPosPed.x, currentOrder.TargetPosPed.y, currentOrder.TargetPosPed.z), locale.Knock)
 							if (IsControlJustPressed(0, 38))
 							{
 								_onRoute.toReset();
-								//global.exports['qb-core'].HideText()
 								SetBlipRoute(routeBlip,false);
 								RemoveBlip(routeBlip);
 								routeBlip = 0;
@@ -295,7 +258,7 @@ async function main(){
 			}
 		}
 		else if (_onRoute.isOrder && !_onRoute.onRouteInOrderGiver && !_onRoute.onRoute){
-			Cfx.Screen.displayHelpTextThisFrame(`Получен заказ, следуйте к отмеченной точке`);
+			Cfx.Screen.displayHelpTextThisFrame(locale.OrderTaked);
 			let pos = new Vector3(currentOrder.TargetPosTake.x, currentOrder.TargetPosTake.y, currentOrder.TargetPosTake.z - 0.98);
 			let dist = Cfx.Game.PlayerPed.Position.distance(pos);
 			if (dist <= deliver.Marker.Dist) {
@@ -303,7 +266,7 @@ async function main(){
 				Cfx.Color.fromArgb(255, deliver.Marker.Color.r, deliver.Marker.Color.g, deliver.Marker.Color.b));
 			}
 			if (dist < 5 && GetEntitySpeed(currentVehicle) == 0) {
-				Cfx.Screen.displayHelpTextThisFrame(`Выйдите из машины и подойдите к отправителю`);
+				Cfx.Screen.displayHelpTextThisFrame(locale.LeaveVehicle);
 				let posAr = GetEntityForwardVector(currentVehicle);
 				let posV = new Vector3(posAr[0], posAr[1], posAr[2]).multiply(5);
 				let pos = Utils.GetVehicleBonePos(currentVehicle, "boot");
@@ -316,7 +279,7 @@ async function main(){
 		}
 		else if (_onRoute.isOrder && _onRoute.onRouteInOrderGiver)
 		{
-			Cfx.Screen.displayHelpTextThisFrame(`Cледуйте к отправителю`);
+			Cfx.Screen.displayHelpTextThisFrame(locale.GoToSender);
 			let dist = Cfx.Game.PlayerPed.Position.distance(currentOrder.TargetPosTakePed)
 			if (dist < 15) {
 				Cfx.World.drawMarker(deliver.Marker.Type, new Vector3(currentOrder.TargetPosTakePed.x, currentOrder.TargetPosTakePed.y, currentOrder.TargetPosTakePed.z-1), new Vector3(0,0,0), new Vector3(0,0,0), new Vector3(deliver.Marker.Scale.x,deliver.Marker.Scale.y,deliver.Marker.Scale.z), 
@@ -339,34 +302,17 @@ async function  StartMission(){
 	inMission = true;
 	GenerateOrder();
 	onRouteTick = setTick(main);
-	/*inMissionTick = setTick(async () => {
-		if (!_onRoute.onRoute) 
-		{
-			if (!_onRoute.isOrder) {
-				
-				GenerateOrder();
-				_onRoute.isOrder = true;
-				//Cfx.Screen.displayHelpTextThisFrame(`Заказ готов. Подойдите к менеджеру и заберите его`);
-
-			}
-			else {
-				Cfx.Screen.displayHelpTextThisFrame(`Заказ готов. Подойдите к менеджеру и заберите его`);
-			}
-		}
-		else {
-			await Delay(1000)
-		}
-	});*/
 }
+
 //Заканчиваем миссию
 async function  FinishMission(){
-	QBCore.Functions.Notify('Вы завершили работу', 'error', 5000)
+	QBCore.Functions.Notify(locale.MissionComplite, 'error', 5000)
 	var pos = GetEntityCoords(currentVehicle, true);
 	if (currentVehicle && Cfx.Game.PlayerPed.Position.distance(new Vector3(pos[0], pos[1], pos[2])) <= 50) {
 		emitNet("cruso-deliver:server:ReturnDeposit", deliver.Office.VehicleDeposit)
 	}
 	else {
-		QBCore.Functions.Notify('Автомобиль утерян, депозит возвращен не будет', 'error', 5000)	
+		QBCore.Functions.Notify(locale.VehicleLosted, 'error', 5000)	
 	}
 	
 
@@ -445,7 +391,7 @@ async function  TakeOrder(){
     await Delay(3500)
 	TaskPlayAnim(Cfx.Game.PlayerPed.Handle, knockAnimLib, "exit", 3.0, 3.0, -1, 1, 0, false, false, false)*/
 	
-	QBCore.Functions.Progressbar('getOrder', "Получаем заказ", 5000, false, false, {
+	QBCore.Functions.Progressbar('getOrder', locale.TakingOrder, 5000, false, false, {
 		disableMovement: true,
 		disableCarMovement: true,
 		disableMouse: false,
@@ -463,23 +409,7 @@ async function  TakeOrder(){
 	{
 		_onRoute.onRouteInOrderGiver = false
 		_onRoute.onRoute = true
-		/*if (props.length>0) {
-			await Utils.StopAnimWithProp(Cfx.Game.PlayerPed.Handle, props[0], 'anim@heists@box_carry@', 'idle');
-			props.splice(0, props.length);
-		}
 		
-		if (props.length == 0) {
-			let _pos = Cfx.Game.PlayerPed.Position;
-			var prop = await Cfx.World.createProp(new Cfx.Model('hei_prop_heist_box'), _pos, false, true);
-			props.push(prop);
-			await Utils.PlayPedAnimationWithProp(Cfx.Game.PlayerPed.Handle, "anim@heists@box_carry@", 'idle', 'hei_prop_heist_box');
-			AttachEntityToEntity(prop.Handle, Cfx.Game.PlayerPed.Handle, GetPedBoneIndex(Cfx.Game.PlayerPed.Handle, 28422), 0, 0, 0, 0, 0, 0, true, true, false, true, 1, true);
-			
-		}*/
-		/*var pos = GetEntityCoords(currentVehicle, true);
-		await SetPointRoute(new Vector3(pos[0], pos[1], pos[2]));
-		_onRoute.isOrder = false;*/
-		//emitNet("cruso-deliver:server:GiveOrder", currentOrder.Item)
 	}, // Done
 	() => {	console.error("сбой")	} //  Cancel
 	)
@@ -495,7 +425,7 @@ async function  GiveOrder(){
     await Delay(3500)
 	TaskPlayAnim(Cfx.Game.PlayerPed.Handle, knockAnimLib, "exit", 3.0, 3.0, -1, 1, 0, false, false, false)
 	let ped = await Utils.pedCreate(currentOrder.Ped, new Vector3(currentOrder.TargetPosPed.x, currentOrder.TargetPosPed.y, currentOrder.TargetPosPed.z), currentOrder.TargetPosPed.w, deliver.Office.PedScenario);
-	QBCore.Functions.Progressbar('getOrder', "Передаем заказ", 5000, false, false, {
+	QBCore.Functions.Progressbar('getOrder', locale.GivingOrder, 5000, false, false, {
 		disableMovement: true,
 		disableCarMovement: true,
 		disableMouse: false,
